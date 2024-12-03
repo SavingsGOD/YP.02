@@ -18,6 +18,8 @@ namespace Cybersport
 
         public LocalAdminForm()
         {
+            this.FormBorderStyle = FormBorderStyle.FixedSingle; // Запретить изменение размера
+            this.MaximizeBox = false; // Запретить кнопку максимизации
             InitializeComponent();
         }
 
@@ -81,6 +83,8 @@ namespace Cybersport
 
         private void LocalAdminForm_Load(object sender, EventArgs e)
         {
+            button8.Enabled = false;
+            label2.Text = "Локальный администратор";
             using (MySqlConnection con = new MySqlConnection(connect))
             {
                 con.Open();
@@ -114,5 +118,31 @@ namespace Cybersport
                 MessageBox.Show("Структура базы данных успешно восстановлена!", "Сообщение пользователю", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
     }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            Authorization authorization = new Authorization();
+            this.Visible = false;
+            authorization.ShowDialog();
+            this.Close();
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            if (MessageBox.Show("Вы уверены, что хотите выйти?", "Выход", MessageBoxButtons.YesNo, MessageBoxIcon.Information) == DialogResult.Yes)
+            {
+                this.Close();
+            }
+        }
+
+        private void LocalAdminForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+
+        }
+
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            button8.Enabled = true;
+        }
     }
 }
