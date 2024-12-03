@@ -47,7 +47,7 @@ namespace Cybersport
 
         private void button1_Click(object sender, EventArgs e)
         {
-            try
+            //try
             {
                 string login = textBox1.Text.ToString();
                 string hashPassword = string.Empty;
@@ -113,10 +113,10 @@ namespace Cybersport
 
                     }
             }
-            catch (Exception)
+            /*//catch (Exception)
             {
                 MessageBox.Show("Ошибка авторизации", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+            }*/
         }
         public static string GetHashPass(string password)
         {
