@@ -75,45 +75,46 @@ namespace Cybersport
                 data.Login = login;
                 data.usrName = userName;
 
-                    if (hashPassword == dt.Rows[0].ItemArray.GetValue(2).ToString())
+                if (hashPassword == dt.Rows[0].ItemArray.GetValue(2).ToString())
+                {
+                    role = dt.Rows[0].ItemArray.GetValue(6).ToString();
+                    data.role = role;
+                    MessageBox.Show("Вы успешно авторизовались");
+                    if (role == "Администратор")
                     {
-                        role = dt.Rows[0].ItemArray.GetValue(6).ToString();
-                        data.role = role;
-                        MessageBox.Show("Вы успешно авторизовались");
-                        if (role == "Администратор")
-                        {
-                            Admin admin = new Admin();
-                            this.Visible = false;
-                            admin.ShowDialog();
-                            this.Close();
-                        }
-                        if (role == "Менеджер")
-                        {
-                            Manager manager = new Manager();
-                            this.Visible = false;
-                            manager.ShowDialog();
-                            this.Close();
-                        }
-                        if (role == "Участник")
-                        {
-                            Player player = new Player();
-                            this.Visible = false;
-                            player.ShowDialog();
-                            this.Close();
-                        }
-                        else
-                        {
-                            MessageBox.Show("Некоректный пользователь");
-                        }
+                        Admin admin = new Admin();
+                        this.Visible = false;
+                        admin.ShowDialog();
+                        this.Close();
+                    }
+                    if (role == "Менеджер")
+                    {
+                        Manager manager = new Manager();
+                        this.Visible = false;
+                        manager.ShowDialog();
+                        this.Close();
+                    }
+                    if (role == "Участник")
+                    {
+                        Player player = new Player();
+                        this.Visible = false;
+                        player.ShowDialog();
+                        this.Close();
                     }
                     else
                     {
-                        MessageBox.Show("Неверный пароль");
-                        textBox2.Text = "";
-
+                        MessageBox.Show("Некоректный пользователь");
                     }
+                }
+                else
+                {
+                    MessageBox.Show("Неверный пароль");
+                    textBox2.Text = "";
+
+                }
             }
-            /*//catch (Exception)
+          /*  }
+            catch (Exception)
             {
                 MessageBox.Show("Ошибка авторизации", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }*/
@@ -147,7 +148,7 @@ namespace Cybersport
                 e.Handled = true;
             }
         }
-         bool IsValidLoginCharacter(char c)
+        bool IsValidLoginCharacter(char c)
         {
             return (c >= 'a' && c <= 'z') ||
                    (c >= 'A' && c <= 'Z') ||
@@ -175,18 +176,18 @@ namespace Cybersport
             if (m1 == 0)
             {
                 textBox2.PasswordChar = default;
-                pictureBox1.Image = Properties.Resources.free_icon_hide_2767146; 
+                pictureBox1.Image = Properties.Resources.free_icon_hide_2767146;
                 m1 = 1;
             }
             else if (m1 == 1)
             {
-                textBox2.PasswordChar = '*'; 
-                pictureBox1.Image = Properties.Resources.free_icon_eye_158746; 
+                textBox2.PasswordChar = '*';
+                pictureBox1.Image = Properties.Resources.free_icon_eye_158746;
                 m1 = 0;
             }
         }
 
-            private void textBox1_TextChanged(object sender, EventArgs e)
+        private void textBox1_TextChanged(object sender, EventArgs e)
         {
 
         }

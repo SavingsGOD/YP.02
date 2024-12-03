@@ -95,5 +95,24 @@ namespace Cybersport
                 }
             }
         }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            DialogResult dialogResult = MessageBox.Show("Вы действительно хотите восстановить БД?", "Сообщение пользователю", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+            if (dialogResult == DialogResult.Yes)
+            {
+                MySqlConnection mySqlConnection = new MySqlConnection(connect);
+                mySqlConnection.Open();
+
+                string pathFile = Directory.GetCurrentDirectory() + @"\..\..\structure.sql";
+                string textFile = File.ReadAllText(pathFile);
+                MySqlCommand mySqlCommand = new MySqlCommand(textFile, mySqlConnection);
+                mySqlCommand.ExecuteNonQuery();
+
+                mySqlConnection.Close();
+
+                MessageBox.Show("Структура базы данных успешно восстановлена!", "Сообщение пользователю", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+    }
     }
 }
