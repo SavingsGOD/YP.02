@@ -10,16 +10,11 @@ using System.Windows.Forms;
 
 namespace Cybersport
 {
-    public partial class Admin : Form
+    public partial class LocalAdminForm : Form
     {
-        public Admin()
+        public LocalAdminForm()
         {
             InitializeComponent();
-        }
-
-        private void Admin_Load(object sender, EventArgs e)
-        {
-
         }
     }
 }

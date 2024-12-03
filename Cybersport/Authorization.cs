@@ -53,6 +53,14 @@ namespace Cybersport
                 string hashPassword = string.Empty;
                 string userName = string.Empty;
                 string role = string.Empty;
+
+                if (textBox1.Text == localadmin.localName && textBox2.Text == localadmin.localPassword)
+                {
+                    LocalAdminForm localAdminForm = new LocalAdminForm();
+                    this.Visible = false;
+                    localAdminForm.ShowDialog();
+                    this.Close();
+                }
                 MySqlConnection con = new MySqlConnection(conString);
                 con.Open();
 
@@ -67,43 +75,43 @@ namespace Cybersport
                 data.Login = login;
                 data.usrName = userName;
 
-                if (hashPassword == dt.Rows[0].ItemArray.GetValue(2).ToString())
-                {
-                    role = dt.Rows[0].ItemArray.GetValue(6).ToString();
-                    data.role = role;
-                    MessageBox.Show("Вы успешно авторизовались");
-                    if (role == "Администратор")
+                    if (hashPassword == dt.Rows[0].ItemArray.GetValue(2).ToString())
                     {
-                        Admin admin = new Admin();
-                        this.Visible = false;
-                        admin.ShowDialog();
-                        this.Close();
-                    }
-                     if (role == "Менеджер")
-                    {
-                        Manager manager = new Manager();
-                        this.Visible = false;
-                        manager.ShowDialog();
-                        this.Close();
-                    }
-                     if (role == "Участник")
-                    {
-                        Player player = new Player();
-                        this.Visible = false;
-                        player.ShowDialog();
-                        this.Close();
+                        role = dt.Rows[0].ItemArray.GetValue(6).ToString();
+                        data.role = role;
+                        MessageBox.Show("Вы успешно авторизовались");
+                        if (role == "Администратор")
+                        {
+                            Admin admin = new Admin();
+                            this.Visible = false;
+                            admin.ShowDialog();
+                            this.Close();
+                        }
+                        if (role == "Менеджер")
+                        {
+                            Manager manager = new Manager();
+                            this.Visible = false;
+                            manager.ShowDialog();
+                            this.Close();
+                        }
+                        if (role == "Участник")
+                        {
+                            Player player = new Player();
+                            this.Visible = false;
+                            player.ShowDialog();
+                            this.Close();
+                        }
+                        else
+                        {
+                            MessageBox.Show("Некоректный пользователь");
+                        }
                     }
                     else
                     {
-                        MessageBox.Show("Некоректный пользователь");
-                    }
-                }
-                else
-                {
-                    MessageBox.Show("Неверный пароль");
-                    textBox2.Text = "";
+                        MessageBox.Show("Неверный пароль");
+                        textBox2.Text = "";
 
-                }
+                    }
             }
             catch (Exception)
             {

@@ -63,6 +63,13 @@
       <DependentUpon>Authorization.cs</DependentUpon>
     </Compile>
     <Compile Include="data.cs" />
+    <Compile Include="localadmin.cs" />
+    <Compile Include="LocalAdminForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="LocalAdminForm.Designer.cs">
+      <DependentUpon>LocalAdminForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Manager.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -123,6 +130,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Authorization.resx">
       <DependentUpon>Authorization.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="LocalAdminForm.resx">
+      <DependentUpon>LocalAdminForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Manager.resx">
       <DependentUpon>Manager.cs</DependentUpon>
