@@ -177,6 +177,7 @@ namespace Cybersport
             pictureBox3.Visible = true;
             button4.Visible = true;
             this.Height = 539;
+            pictureBox3.Location.Offset(499, 234);
             textBox3.Location.Offset(741, 244);
             button4.Location.Offset(741, 284);
         }
@@ -273,16 +274,6 @@ namespace Cybersport
             {
                 this.Close();
             }
-        }
-
-        private void button4_Click_1(object sender, EventArgs e)
-        {
-            Captha();
-        }
-
-        private void textBox3_TextChanged(object sender, EventArgs e)
-        {
-
         }
     }
 }
