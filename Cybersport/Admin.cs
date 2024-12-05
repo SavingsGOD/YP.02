@@ -21,5 +21,18 @@ namespace Cybersport
         {
 
         }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            Users users = new Users();
+            this.Visible = false;
+            users.ShowDialog();
+            this.Close();
+        }
     }
 }

@@ -48,6 +48,7 @@ namespace Cybersport
             this.button4.TabIndex = 38;
             this.button4.Text = "Выход";
             this.button4.UseVisualStyleBackColor = false;
+            this.button4.Click += new System.EventHandler(this.button4_Click);
             // 
             // button3
             // 
@@ -60,6 +61,7 @@ namespace Cybersport
             this.button3.TabIndex = 35;
             this.button3.Text = "Список пользователей";
             this.button3.UseVisualStyleBackColor = false;
+            this.button3.Click += new System.EventHandler(this.button3_Click);
             // 
             // label2
             // 
@@ -104,6 +106,7 @@ namespace Cybersport
             this.Controls.Add(this.pictureBox2);
             this.Controls.Add(this.label1);
             this.Name = "Admin";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Admin";
             this.Load += new System.EventHandler(this.Admin_Load);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
