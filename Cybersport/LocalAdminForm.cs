@@ -15,7 +15,7 @@ namespace Cybersport
     public partial class LocalAdminForm : Form
     {
         string connect = data.conStr;
-
+        string connect3 = data.conStr3;
         public LocalAdminForm()
         {
             this.FormBorderStyle = FormBorderStyle.FixedSingle; // Запретить изменение размера
@@ -46,9 +46,36 @@ namespace Cybersport
             }
         }
 
+        private void LoadTableNames(MySqlConnection connection)
+        {
+            comboBox1.Items.Clear(); // Очищаем текущие элементы комбобокса
+
+            using (MySqlCommand cmd = new MySqlCommand("SHOW TABLES", connection))
+            {
+                using (MySqlDataReader reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        comboBox1.Items.Add(reader.GetString(0)); // Добавляем названия таблиц в комбобокс
+                    }
+                }
+            }
+        }
+
+        bool IsGenreUnique(string genreName, MySqlConnection connection)
+        {
+            using (MySqlCommand cmd = new MySqlCommand("SELECT COUNT(*) FROM GameGenres WHERE GenreName = @GenreName", connection))
+            {
+                cmd.Parameters.AddWithValue("@GenreName", genreName);
+                int count = Convert.ToInt32(cmd.ExecuteScalar());
+                return count == 0; // Возвращаем true, если жанр уникален
+            }
+        }
+
         int ImportCSV(string csvFilePath, string tableName, MySqlConnection connection)
         {
             int res = 0;
+
             using (StreamReader reader = new StreamReader(csvFilePath))
             {
                 string headerLine = reader.ReadLine();
@@ -61,13 +88,25 @@ namespace Cybersport
 
                     if (values.Length != headers.Length)
                     {
-                        MessageBox.Show("The number of values does not match the number of headers.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        continue; 
+                        MessageBox.Show("Количество значений не соответствует количеству заголовков.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        continue;
                     }
+
+                    // Проверяем, что жанр существует и его название уникально
+                   /* if (tableName.Equals("GameGenres", StringComparison.OrdinalIgnoreCase))
+                    {
+                        string genreName = values[0]; // Предполагаем, что имя жанра находится в первом столбце
+                        if (IsGenreUnique(genreName, connection))
+                        {
+                            MessageBox.Show($"Жанр '{genreName}' уже существует. Запись пропущена.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            continue; // Пропускаем вставку для этой записи
+                        }
+                    }*/
+
                     for (int i = 0; i < values.Length; i++)
                     {
-                        values[i] = MySqlHelper.EscapeString(values[i]); 
-                        values[i] = $"'{values[i]}'"; 
+                        values[i] = MySqlHelper.EscapeString(values[i]);
+                        values[i] = $"'{values[i]}'";
                     }
 
                     string query = $"INSERT INTO {tableName} ({string.Join(",", headers)}) VALUES ({string.Join(",", values)})";
@@ -85,41 +124,34 @@ namespace Cybersport
         {
             button8.Enabled = false;
             label2.Text = "Локальный администратор";
-            using (MySqlConnection con = new MySqlConnection(connect))
-            {
-                con.Open();
-                MySqlCommand cmd = new MySqlCommand(@"SHOW TABLES", con);
-
-                using (IDataReader dataReader = cmd.ExecuteReader())
-                {
-                    while (dataReader.Read())
-                    {
-                        comboBox1.Items.Add(dataReader.GetValue(0).ToString());
-                    }
-                }
-            }
         }
+
 
         private void button1_Click(object sender, EventArgs e)
         {
             DialogResult dialogResult = MessageBox.Show("Вы действительно хотите восстановить БД?", "Сообщение пользователю", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
             if (dialogResult == DialogResult.Yes)
             {
-                MySqlConnection mySqlConnection = new MySqlConnection(connect);
-                mySqlConnection.Open();
+                using (MySqlConnection mySqlConnection = new MySqlConnection(connect3))
+                {
+                    mySqlConnection.Open();
 
-                string pathFile = Directory.GetCurrentDirectory() + @"\..\..\structure.sql";
-                string textFile = File.ReadAllText(pathFile);
-                MySqlCommand mySqlCommand = new MySqlCommand(textFile, mySqlConnection);
-                mySqlCommand.ExecuteNonQuery();
+                    string pathFile = Directory.GetCurrentDirectory() + @"\..\..\structure.sql";
+                    string textFile = File.ReadAllText(pathFile);
+                    MySqlCommand mySqlCommand = new MySqlCommand(textFile, mySqlConnection);
+                    mySqlCommand.ExecuteNonQuery();
 
-                mySqlConnection.Close();
+                    // Загрузка названий таблиц после восстановления базы данных
+                    LoadTableNames(mySqlConnection);
 
-                MessageBox.Show("Структура базы данных успешно восстановлена!", "Сообщение пользователю", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show("Структура базы данных успешно восстановлена!", "Сообщение пользователю", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+
+                }
             }
-    }
+        }
 
-        private void button4_Click(object sender, EventArgs e)
+            private void button4_Click(object sender, EventArgs e)
         {
             Authorization authorization = new Authorization();
             this.Visible = false;

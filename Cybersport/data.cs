@@ -13,6 +13,7 @@ namespace Cybersport
         static public string db = Properties.Settings.Default.db;
         static public string pwd = Properties.Settings.Default.pwd;
         static public string conStr = $@"host=localhost;uid=root;pwd=;database=cybersport;";
+        static public string conStr3 = $@"host=localhost;uid=root;pwd=;";
         static public string conStr2 = $@"host={host};uid={user};pwd={pwd};";
         static public string role;
         static public string usrName;

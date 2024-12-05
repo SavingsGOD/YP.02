@@ -10,6 +10,7 @@ using System.Text;
 using MySql.Data.MySqlClient;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Drawing.Drawing2D;
 using System.Security.Cryptography;
 
 namespace Cybersport
@@ -17,6 +18,7 @@ namespace Cybersport
     public partial class Authorization : Form
     {
         string adminName = localadmin.localName;
+        private string captchaText;
         public Authorization()
         {
             this.FormBorderStyle = FormBorderStyle.FixedSingle; // Запретить изменение размера
@@ -78,7 +80,7 @@ namespace Cybersport
 
                 if (dt.Rows.Count == 0)
                 {
-                    MessageBox.Show("Пользователь не найден");
+                    MessageBox.Show("Пользователь не найден", "Ошибка авторизации", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
 
@@ -121,8 +123,9 @@ namespace Cybersport
                 }
                 else
                 {
-                    MessageBox.Show("Неверный пароль");
+                    MessageBox.Show("Неверный пароль", "Ошибка авторизации", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     textBox2.Text = "";
+                    Captha();
                 }
             }
             catch (Exception ex)
@@ -160,7 +163,54 @@ namespace Cybersport
         {
 
         }
+        private void Captha()
+        {
+            CaptchaToImage();
+            button2.Enabled = false;
+            button1.Enabled = false;
+            pictureBox3.Enabled = false;
+            button3.Enabled = false;
+            textBox1.Enabled = false;
+            textBox2.Enabled = false;
+            textBox1.Text = null;
+            textBox3.Visible = true;
+            pictureBox3.Visible = true;
+            button4.Visible = true;
+            this.Height = 539;
+            textBox3.Location.Offset(741, 244);
+            button4.Location.Offset(741, 284);
+        }
 
+        private void CaptchaToImage()
+        {
+            Random random = new Random();
+            string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+            captchaText = ""; for (int i = 0; i < 4; i++)
+            {
+                captchaText += chars[random.Next(chars.Length)];
+            }
+            Bitmap bmp = new Bitmap(pictureBox3.Width, pictureBox3.Height);
+            Graphics graphics = Graphics.FromImage(bmp);
+            graphics.SmoothingMode = SmoothingMode.AntiAlias; graphics.Clear(Color.White);
+            Font font = new Font("Comic Sans MS", 20, FontStyle.Bold);
+            for (int i = 0; i < 4; i++)
+            {
+                PointF point = new PointF(i * 20, 0);
+                graphics.TranslateTransform(10, 10);
+                graphics.RotateTransform(random.Next(-10, 10));
+                graphics.DrawString(captchaText[i].ToString(), font, Brushes.Black, point);
+                graphics.ResetTransform();
+            }
+            for (int i = 0; i < 10; i++)
+            {
+                Pen pen = new Pen(Color.Red, random.Next(2, 5));
+                int x1 = random.Next(pictureBox3.Width);
+                int y1 = random.Next(pictureBox3.Height);
+                int x2 = random.Next(pictureBox3.Width);
+                int y2 = random.Next(pictureBox3.Height); graphics.DrawLine(pen, x1, y1, x2, y2);
+            }
+            pictureBox3.Image = bmp;
+        }
         private void textBox1_KeyPress(object sender, KeyPressEventArgs e)
         {
             if (!IsValidLoginCharacter(e.KeyChar) && !char.IsControl(e.KeyChar))
@@ -223,6 +273,16 @@ namespace Cybersport
             {
                 this.Close();
             }
+        }
+
+        private void button4_Click_1(object sender, EventArgs e)
+        {
+            Captha();
+        }
+
+        private void textBox3_TextChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }
