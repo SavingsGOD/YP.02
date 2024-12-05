@@ -66,7 +66,7 @@ namespace Cybersport
             using (MySqlConnection conn = new MySqlConnection(connectionString))
             {
                 try
-                {
+                {//
                     conn.Open();
                     MySqlDataAdapter adapter = new MySqlDataAdapter(query, conn);
                     DataTable usersTable = new DataTable();
