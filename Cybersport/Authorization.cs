@@ -8,6 +8,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using MySql.Data.MySqlClient;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Drawing.Drawing2D;
@@ -57,6 +58,11 @@ namespace Cybersport
             string login = textBox1.Text.ToString();
             string password = textBox2.Text.ToString();
 
+            if (string.IsNullOrWhiteSpace(textBox1.Text) || string.IsNullOrWhiteSpace(textBox2.Text))
+            {
+                MessageBox.Show("Пожалуйста, заполните все поля.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
             // Проверка локального администратора
             if (IsLocalAdmin(login, password))
             {
@@ -166,20 +172,15 @@ namespace Cybersport
         private void Captha()
         {
             CaptchaToImage();
-            button2.Enabled = false;
-            button1.Enabled = false;
             pictureBox3.Enabled = false;
-            button3.Enabled = false;
-            textBox1.Enabled = false;
-            textBox2.Enabled = false;
             textBox1.Text = null;
+            textBox2.Text = null;
             textBox3.Visible = true;
+            button5.Visible = true;
             pictureBox3.Visible = true;
             button4.Visible = true;
             this.Height = 539;
-            pictureBox3.Location.Offset(499, 234);
-            textBox3.Location.Offset(741, 244);
-            button4.Location.Offset(741, 284);
+            button1.Visible = false;
         }
 
         private void CaptchaToImage()
@@ -273,6 +274,115 @@ namespace Cybersport
             if (MessageBox.Show("Вы уверены, что хотите выйти?", "Выход", MessageBoxButtons.YesNo, MessageBoxIcon.Information) == DialogResult.Yes)
             {
                 this.Close();
+            }
+        }
+
+        private void button4_Click_1(object sender, EventArgs e)
+        {
+            Captha();
+        }
+
+        private void textBox3_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            string login = textBox1.Text.ToString();
+            string password = textBox2.Text.ToString();
+
+            if (string.IsNullOrWhiteSpace(textBox1.Text) || string.IsNullOrWhiteSpace(textBox2.Text) || string.IsNullOrWhiteSpace(textBox3.Text))
+            {
+                MessageBox.Show("Пожалуйста, заполните все поля.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+            if(textBox3.Text != captchaText)
+            {
+                MessageBox.Show("Капча введена неверно!", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                Thread.Sleep(10000);
+                Captha();
+                textBox3.Clear();
+                return;
+            }
+            // Проверка локального администратора
+            if (IsLocalAdmin(login, password))
+            {
+                MessageBox.Show("Вы успешно авторизовались как локальный администратор");
+                LocalAdminForm localAdminForm = new LocalAdminForm();
+                this.Visible = false;
+                localAdminForm.ShowDialog();
+                this.Close();
+                return; // Завершить выполнение метода
+            }
+
+            // Если это не локальный администратор, продолжаем проверку в базе данных
+            MySqlConnection con = new MySqlConnection(conString);
+            try
+            {
+                con.Open();
+                MySqlCommand cmd = new MySqlCommand($"Select * From Users Where Username = '{login}'", con);
+                MySqlDataAdapter da = new MySqlDataAdapter(cmd);
+                DataTable dt = new DataTable();
+                da.Fill(dt);
+
+                if (dt.Rows.Count == 0)
+                {
+                    MessageBox.Show("Пользователь не найден", "Ошибка авторизации", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
+                string hashPassword = GetHashPass(password);
+                string storedHashPassword = dt.Rows[0].ItemArray.GetValue(2).ToString();
+
+                if (hashPassword == storedHashPassword)
+                {
+                    // Получаем имя пользователя и роль только для обычных пользователей
+                    string userName = dt.Rows[0].ItemArray.GetValue(4).ToString();
+                    string role = dt.Rows[0].ItemArray.GetValue(6).ToString();
+                    data.Login = login;
+                    data.usrName = userName;
+                    data.role = role;
+
+                    MessageBox.Show("Вы успешно авторизовались");
+
+                    switch (role)
+                    {
+                        case "Администратор":
+                            Admin admin = new Admin();
+                            this.Visible = false;
+                            admin.ShowDialog();
+                            break;
+                        case "Менеджер":
+                            Manager manager = new Manager();
+                            this.Visible = false;
+                            manager.ShowDialog();
+                            break;
+                        case "Участник":
+                            Player player = new Player();
+                            this.Visible = false;
+                            player.ShowDialog();
+                            break;
+                        default:
+                            MessageBox.Show("Некорректный пользователь");
+                            break;
+                    }
+                    this.Close();
+                }
+                else
+                {
+                    MessageBox.Show("Неверный пароль", "Ошибка авторизации", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    textBox2.Text = "";
+                    Captha();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Ошибка авторизации: " + ex.Message, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                con.Close();
             }
         }
     }
