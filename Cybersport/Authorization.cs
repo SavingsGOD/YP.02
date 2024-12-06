@@ -220,6 +220,17 @@ namespace Cybersport
                 e.Handled = true;
             }
         }
+        private void Captha2()
+        {
+            CaptchaToImage();
+            pictureBox3.Enabled = false;
+            textBox3.Visible = true;
+            button5.Visible = true;
+            pictureBox3.Visible = true;
+            button4.Visible = true;
+            this.Height = 539;
+            button1.Visible = false;
+        }
         bool IsValidLoginCharacter(char c)
         {
             return (c >= 'a' && c <= 'z') ||
@@ -279,7 +290,7 @@ namespace Cybersport
 
         private void button4_Click_1(object sender, EventArgs e)
         {
-            Captha();
+            Captha2();
         }
 
         private void textBox3_TextChanged(object sender, EventArgs e)
@@ -337,7 +348,7 @@ namespace Cybersport
 
                 if (hashPassword == storedHashPassword)
                 {
-                    // Получаем имя пользователя и роль только для обычных пользователей
+                    /// Получаем имя пользователя и роль только для обычных пользователей
                     string userName = dt.Rows[0].ItemArray.GetValue(4).ToString();
                     string role = dt.Rows[0].ItemArray.GetValue(6).ToString();
                     data.Login = login;

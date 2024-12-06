@@ -187,11 +187,13 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\png-transparent-arrow-direction-pointer-right-arrow-icon.png" />
     <None Include="Resources\logo2.png" />
     <None Include="Resources\Без названия.png" />
     <None Include="Resources\eye-icon-sign-vector-illustration-stock-image_797523-1748.jpg" />
     <None Include="Resources\free-icon-eye-158746.png" />
     <None Include="Resources\free-icon-hide-2767146.png" />
+    <None Include="Resources\left.png" />
     <Content Include="Resources\logo.png" />
     <None Include="Resources\password-hidding-icon-icon-data-privacy-sensitive-content-mark-vector-illustration_499431-1267.jpg" />
   </ItemGroup>
