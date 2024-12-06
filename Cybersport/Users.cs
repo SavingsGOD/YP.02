@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using MySql.Data.MySqlClient;
 using System.Windows.Forms;
+using System.Net;
 
 namespace Cybersport
 {
@@ -83,15 +84,16 @@ namespace Cybersport
         {
             string connectionString = data.conStr;
             string query = @"
-        SELECT 
-            UserID AS 'ID', 
-            Username AS 'Логин', 
-            Password AS 'Пароль', 
-            Email AS 'Email', 
-            FIO AS 'ФИО', 
-            PhoneNumber AS 'Телефон', 
-            Role AS 'Роль' 
-        FROM Users";
+    SELECT 
+        UserID AS 'ID', 
+        Username AS 'Логин', 
+        CONCAT(LEFT(Email, 2), REPEAT('*', LENGTH(Email) - 2 - LENGTH(SUBSTRING_INDEX(Email, '@', -1)) - 1), '@', SUBSTRING_INDEX(Email, '@', -1)) AS 'Email', -- Оставить первые 2 символа перед '@' и заменить остальные на '*'
+        CONCAT(SUBSTRING_INDEX(FIO, ' ', 1), ' ', 
+               UPPER(LEFT(SUBSTRING_INDEX(FIO, ' ', 2), 1)), '. ', 
+               UPPER(LEFT(SUBSTRING_INDEX(FIO, ' ', -1), 1)), '.') AS 'ФИО', 
+        CONCAT(SUBSTRING(PhoneNumber, 1, LENGTH(PhoneNumber) - 4), '****') AS 'Телефон', 
+        Role AS 'Роль' 
+    FROM Users";
 
             // Добавление условия поиска
             if (!string.IsNullOrWhiteSpace(searchTerm))
@@ -126,7 +128,6 @@ namespace Cybersport
 
                     // Обновление отображения пагинации
                     UpdatePaginationDisplay();
-
                 }
                 catch (Exception ex)
                 {
@@ -134,6 +135,11 @@ namespace Cybersport
                 }
             }
         }
+
+
+
+
+
 
         private void UpdateTotalRecords(string searchTerm)
         {
@@ -286,6 +292,27 @@ namespace Cybersport
         {
             currentPage = 5; // Adjust this as necessary based on total pages
             LoadUsers(search.Text);
+        }
+
+        private void dataGridView1_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex >= 0) // убедитесь, что строка выбрана
+            {
+                int userId = Convert.ToInt32(dataGridView1.Rows[e.RowIndex].Cells["ID"].Value);
+                UserDetail detailForm = new UserDetail(userId);
+                this.Visible = false;
+                detailForm.ShowDialog();
+                this.Close();
+            }
+        }
+
+        private void dataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex != -1)
+            {
+                int r = e.RowIndex;
+                dataGridView1.Rows[r].Selected = true;
+            }
         }
     }
 }
