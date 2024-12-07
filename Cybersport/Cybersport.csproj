@@ -46,6 +46,7 @@
       <HintPath>..\..\..\..\..\..\Program Files (x86)\MySQL\MySQL Installer for Windows\MySql.Data.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -109,6 +110,12 @@
     <Compile Include="Player.Designer.cs">
       <DependentUpon>Player.cs</DependentUpon>
     </Compile>
+    <Compile Include="Settings.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Settings.Designer.cs">
+      <DependentUpon>Settings.cs</DependentUpon>
+    </Compile>
     <Compile Include="TournamentResults.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -165,6 +172,9 @@
     <EmbeddedResource Include="Player.resx">
       <DependentUpon>Player.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Settings.resx">
+      <DependentUpon>Settings.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="TournamentResults.resx">
       <DependentUpon>TournamentResults.cs</DependentUpon>
     </EmbeddedResource>
@@ -195,6 +205,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\png-transparent-settings-gear-icon-gear-configuration-set-up-thumbnail.png" />
     <None Include="Resources\png-transparent-arrow-direction-pointer-right-arrow-icon.png" />
     <None Include="Resources\logo2.png" />
     <None Include="Resources\Без названия.png" />

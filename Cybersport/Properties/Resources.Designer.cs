@@ -144,6 +144,16 @@ namespace Cybersport.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap png_transparent_settings_gear_icon_gear_configuration_set_up_thumbnail {
+            get {
+                object obj = ResourceManager.GetObject("png-transparent-settings-gear-icon-gear-configuration-set-up-thumbnail", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Без_названия {
             get {
                 object obj = ResourceManager.GetObject("Без названия", resourceCulture);

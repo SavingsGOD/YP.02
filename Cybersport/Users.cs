@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using MySql.Data.MySqlClient;
 using System.Windows.Forms;
+using System.Configuration;
 using System.Net;
 
 namespace Cybersport
@@ -18,12 +19,16 @@ namespace Cybersport
         private int currentPage = 1; // Current page number
         private int pageSize = 20;    // Number of records per page
         private int totalRecords;      // Total number of records
+        private Timer idleTimer;
+        private int idleTimeout = Convert.ToInt32(Properties.Settings.Default.Time);
 
         public Users()
         {
             this.FormBorderStyle = FormBorderStyle.FixedSingle; // Запретить изменение размера
             this.MaximizeBox = false; // Запретить кнопку максимизации
             InitializeComponent();
+            InitializeIdleTimer();
+            LoadIdleTimeout();
         }
         private void GetDate()
         {
@@ -47,7 +52,7 @@ namespace Cybersport
 
         }
 
-            private void Users_FormClosing(object sender, FormClosingEventArgs e)
+        private void Users_FormClosing(object sender, FormClosingEventArgs e)
         {
             e.Cancel = true;
         }
@@ -77,7 +82,55 @@ namespace Cybersport
         {
             GetDate();
             LoadUsers();
-            
+
+        }
+        private void LoadIdleTimeout()
+        {
+            if (int.TryParse(ConfigurationManager.AppSettings["IdleTimeout"], out int timeout))
+            {
+                idleTimeout = timeout * 1000;
+            }
+            else
+            {
+                idleTimeout = 10000;
+            }
+        }
+
+        private void InitializeIdleTimer()
+        {
+            idleTimer = new Timer();
+            idleTimer.Interval = idleTimeout;
+            idleTimer.Tick += IdleTimer_Tick;
+            idleTimer.Start();
+            this.MouseMove += ResetIdleTimer;
+            this.KeyPress += ResetIdleTimer;
+            this.KeyDown += ResetIdleTimer;
+            this.MouseClick += ResetIdleTimer;
+        }
+
+        private void ResetIdleTimer(object sender, EventArgs e)
+        {
+            idleTimer.Stop();
+            idleTimer.Interval = idleTimeout;
+            idleTimer.Start();
+        }
+
+        private void IdleTimer_Tick(object sender, EventArgs e)
+        {
+            idleTimer.Stop();
+            this.Hide();
+
+            using (var loginForm = new Authorization())
+            {
+                if (loginForm.ShowDialog() == DialogResult.OK)
+                {
+                    this.Show();
+                }
+                else
+                {
+                    Application.Exit();
+                }
+            }
         }
 
         private void LoadUsers(string searchTerm = "")
@@ -91,8 +144,8 @@ namespace Cybersport
         CONCAT(SUBSTRING_INDEX(FIO, ' ', 1), ' ', 
                UPPER(LEFT(SUBSTRING_INDEX(FIO, ' ', 2), 1)), '. ', 
                UPPER(LEFT(SUBSTRING_INDEX(FIO, ' ', -1), 1)), '.') AS 'ФИО', 
-        CONCAT(SUBSTRING(PhoneNumber, 1, LENGTH(PhoneNumber) - 4), '****') AS 'Телефон', 
-        Role AS 'Роль' 
+               PhoneNumber AS 'Телефон', 
+               Role AS 'Роль' 
     FROM Users";
 
             // Добавление условия поиска
@@ -160,7 +213,7 @@ namespace Cybersport
                         countCommand.Parameters.AddWithValue("@searchTerm", "%" + searchTerm + "%");
                     }
 
-                   
+
                 }
                 catch (Exception ex)
                 {
@@ -260,7 +313,7 @@ namespace Cybersport
         }
 
 
-            private void number_of_pages_Click(object sender, EventArgs e)
+        private void number_of_pages_Click(object sender, EventArgs e)
         {
 
         }
@@ -314,7 +367,26 @@ namespace Cybersport
                 dataGridView1.Rows[r].Selected = true;
             }
         }
+
+        private void dataGridView1_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
+        {
+            string val = e.Value.ToString();
+            switch (dataGridView1.Columns[e.ColumnIndex].Name)
+            {
+                case "Телефон":
+                    int len = val.Length;
+                    e.Value = val.Substring(0, 8) + "***" + val.Substring(len - 5);
+                    break;
+            }
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            Authorization authorization = new Authorization();
+            this.Visible = false;
+            authorization.ShowDialog();
+            this.Close();
+        }
     }
 }
-
 

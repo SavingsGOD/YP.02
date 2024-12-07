@@ -32,8 +32,6 @@ namespace Cybersport
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.button4 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
-            this.pointer_arrow1 = new System.Windows.Forms.PictureBox();
-            this.pointer_arrow2 = new System.Windows.Forms.PictureBox();
             this.page1 = new System.Windows.Forms.Label();
             this.page2 = new System.Windows.Forms.Label();
             this.page3 = new System.Windows.Forms.Label();
@@ -41,6 +39,9 @@ namespace Cybersport
             this.number_of_pages = new System.Windows.Forms.Label();
             this.search = new System.Windows.Forms.TextBox();
             this.page5 = new System.Windows.Forms.Label();
+            this.pointer_arrow1 = new System.Windows.Forms.PictureBox();
+            this.pointer_arrow2 = new System.Windows.Forms.PictureBox();
+            this.button3 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pointer_arrow1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pointer_arrow2)).BeginInit();
@@ -52,13 +53,14 @@ namespace Cybersport
             this.dataGridView1.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dataGridView1.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.Location = new System.Drawing.Point(26, 57);
+            this.dataGridView1.Location = new System.Drawing.Point(15, 57);
             this.dataGridView1.Margin = new System.Windows.Forms.Padding(6);
             this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.Size = new System.Drawing.Size(1334, 395);
+            this.dataGridView1.Size = new System.Drawing.Size(1345, 395);
             this.dataGridView1.TabIndex = 0;
             this.dataGridView1.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellClick);
             this.dataGridView1.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellDoubleClick);
+            this.dataGridView1.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.dataGridView1_CellFormatting);
             this.dataGridView1.DataBindingComplete += new System.Windows.Forms.DataGridViewBindingCompleteEventHandler(this.dataGridView1_DataBindingComplete);
             // 
             // button4
@@ -86,28 +88,6 @@ namespace Cybersport
             this.button2.TabIndex = 29;
             this.button2.Text = "Добавить";
             this.button2.UseVisualStyleBackColor = false;
-            // 
-            // pointer_arrow1
-            // 
-            this.pointer_arrow1.Image = global::Cybersport.Properties.Resources.left;
-            this.pointer_arrow1.Location = new System.Drawing.Point(422, 484);
-            this.pointer_arrow1.Name = "pointer_arrow1";
-            this.pointer_arrow1.Size = new System.Drawing.Size(62, 49);
-            this.pointer_arrow1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pointer_arrow1.TabIndex = 33;
-            this.pointer_arrow1.TabStop = false;
-            this.pointer_arrow1.Click += new System.EventHandler(this.pictureBox2_Click);
-            // 
-            // pointer_arrow2
-            // 
-            this.pointer_arrow2.Image = global::Cybersport.Properties.Resources.png_transparent_arrow_direction_pointer_right_arrow_icon;
-            this.pointer_arrow2.Location = new System.Drawing.Point(637, 484);
-            this.pointer_arrow2.Name = "pointer_arrow2";
-            this.pointer_arrow2.Size = new System.Drawing.Size(62, 49);
-            this.pointer_arrow2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pointer_arrow2.TabIndex = 32;
-            this.pointer_arrow2.TabStop = false;
-            this.pointer_arrow2.Click += new System.EventHandler(this.pointer_arrow2_Click);
             // 
             // page1
             // 
@@ -162,10 +142,10 @@ namespace Cybersport
             // search
             // 
             this.search.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(204)))), ((int)(((byte)(153)))));
-            this.search.Location = new System.Drawing.Point(26, 14);
+            this.search.Location = new System.Drawing.Point(15, 14);
             this.search.MaxLength = 20;
             this.search.Name = "search";
-            this.search.Size = new System.Drawing.Size(501, 34);
+            this.search.Size = new System.Drawing.Size(512, 34);
             this.search.TabIndex = 39;
             this.search.TextChanged += new System.EventHandler(this.search_TextChanged);
             // 
@@ -179,11 +159,47 @@ namespace Cybersport
             this.page5.Text = "5";
             this.page5.Click += new System.EventHandler(this.page5_Click);
             // 
+            // pointer_arrow1
+            // 
+            this.pointer_arrow1.Image = global::Cybersport.Properties.Resources.left;
+            this.pointer_arrow1.Location = new System.Drawing.Point(422, 484);
+            this.pointer_arrow1.Name = "pointer_arrow1";
+            this.pointer_arrow1.Size = new System.Drawing.Size(62, 49);
+            this.pointer_arrow1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pointer_arrow1.TabIndex = 33;
+            this.pointer_arrow1.TabStop = false;
+            this.pointer_arrow1.Click += new System.EventHandler(this.pictureBox2_Click);
+            // 
+            // pointer_arrow2
+            // 
+            this.pointer_arrow2.Image = global::Cybersport.Properties.Resources.png_transparent_arrow_direction_pointer_right_arrow_icon;
+            this.pointer_arrow2.Location = new System.Drawing.Point(637, 484);
+            this.pointer_arrow2.Name = "pointer_arrow2";
+            this.pointer_arrow2.Size = new System.Drawing.Size(62, 49);
+            this.pointer_arrow2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pointer_arrow2.TabIndex = 32;
+            this.pointer_arrow2.TabStop = false;
+            this.pointer_arrow2.Click += new System.EventHandler(this.pointer_arrow2_Click);
+            // 
+            // button3
+            // 
+            this.button3.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.button3.BackColor = System.Drawing.Color.White;
+            this.button3.Font = new System.Drawing.Font("Comic Sans MS", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.button3.Location = new System.Drawing.Point(15, 518);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(243, 36);
+            this.button3.TabIndex = 41;
+            this.button3.Text = "Назад";
+            this.button3.UseVisualStyleBackColor = false;
+            this.button3.Click += new System.EventHandler(this.button3_Click);
+            // 
             // Users
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 26F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1364, 566);
+            this.Controls.Add(this.button3);
             this.Controls.Add(this.page5);
             this.Controls.Add(this.search);
             this.Controls.Add(this.number_of_pages);
@@ -225,5 +241,6 @@ namespace Cybersport
         private System.Windows.Forms.Label number_of_pages;
         private System.Windows.Forms.TextBox search;
         private System.Windows.Forms.Label page5;
+        private System.Windows.Forms.Button button3;
     }
 }

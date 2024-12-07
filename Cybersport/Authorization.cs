@@ -396,5 +396,13 @@ namespace Cybersport
                 con.Close();
             }
         }
+
+        private void pictureBox4_Click(object sender, EventArgs e)
+        {
+            Settings settings = new Settings();
+            this.Visible = false;
+            settings.ShowDialog();
+            this.Close();
+        }
     }
 }
