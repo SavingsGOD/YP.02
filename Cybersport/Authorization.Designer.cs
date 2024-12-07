@@ -204,10 +204,10 @@
             // pictureBox4
             // 
             this.pictureBox4.BackColor = System.Drawing.SystemColors.Control;
-            this.pictureBox4.Image = global::Cybersport.Properties.Resources.png_transparent_settings_gear_icon_gear_configuration_set_up_thumbnail;
-            this.pictureBox4.Location = new System.Drawing.Point(943, 44);
+            this.pictureBox4.Image = global::Cybersport.Properties.Resources.Group;
+            this.pictureBox4.Location = new System.Drawing.Point(954, 44);
             this.pictureBox4.Name = "pictureBox4";
-            this.pictureBox4.Size = new System.Drawing.Size(48, 41);
+            this.pictureBox4.Size = new System.Drawing.Size(46, 39);
             this.pictureBox4.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBox4.TabIndex = 45;
             this.pictureBox4.TabStop = false;

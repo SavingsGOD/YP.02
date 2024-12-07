@@ -382,9 +382,9 @@ namespace Cybersport
 
         private void button3_Click(object sender, EventArgs e)
         {
-            Authorization authorization = new Authorization();
+            Admin admin = new Admin();
             this.Visible = false;
-            authorization.ShowDialog();
+            admin.ShowDialog();
             this.Close();
         }
     }

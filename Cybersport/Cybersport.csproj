@@ -213,6 +213,7 @@
     <None Include="Resources\free-icon-eye-158746.png" />
     <None Include="Resources\free-icon-hide-2767146.png" />
     <None Include="Resources\left.png" />
+    <None Include="Resources\Group.png" />
     <Content Include="Resources\logo.png" />
     <None Include="Resources\password-hidding-icon-icon-data-privacy-sensitive-content-mark-vector-illustration_499431-1267.jpg" />
   </ItemGroup>
