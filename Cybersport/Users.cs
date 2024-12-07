@@ -54,7 +54,13 @@ namespace Cybersport
 
         private void Users_FormClosing(object sender, FormClosingEventArgs e)
         {
-            e.Cancel = true;
+            // Остановить таймер перед закрытием формы
+            if (idleTimer != null)
+            {
+                idleTimer.Stop();
+                idleTimer.Dispose(); // Освободить ресурсы таймера
+            }
+            e.Cancel = true; // Заблокировать закрытие формы
         }
 
         string countDate(string Sele)
@@ -117,18 +123,21 @@ namespace Cybersport
 
         private void IdleTimer_Tick(object sender, EventArgs e)
         {
-            idleTimer.Stop();
-            this.Hide();
+            idleTimer.Stop(); // Остановить таймер
+            this.Close(); // Закрыть форму
+            this.Visible = false;
 
+            // Показать форму авторизации
             using (var loginForm = new Authorization())
             {
                 if (loginForm.ShowDialog() == DialogResult.OK)
                 {
-                    this.Show();
+                    this.Close();
+                    this.ShowDialog(); // Показать текущую форму снова
                 }
                 else
                 {
-                    Application.Exit();
+                    Application.Exit(); // Закрыть приложение
                 }
             }
         }
@@ -188,11 +197,6 @@ namespace Cybersport
                 }
             }
         }
-
-
-
-
-
 
         private void UpdateTotalRecords(string searchTerm)
         {
@@ -349,6 +353,11 @@ namespace Cybersport
 
         private void dataGridView1_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
+            if (idleTimer != null)
+            {
+                idleTimer.Stop();
+                idleTimer.Dispose(); // Освободить ресурсы таймера
+            }
             if (e.RowIndex >= 0) // убедитесь, что строка выбрана
             {
                 int userId = Convert.ToInt32(dataGridView1.Rows[e.RowIndex].Cells["ID"].Value);
@@ -382,10 +391,35 @@ namespace Cybersport
 
         private void button3_Click(object sender, EventArgs e)
         {
+            if (idleTimer != null)
+            {
+                idleTimer.Stop();
+                idleTimer.Dispose(); // Освободить ресурсы таймера
+            }
             Admin admin = new Admin();
             this.Visible = false;
             admin.ShowDialog();
             this.Close();
+        }
+
+        private void dataGridView1_MouseDown(object sender, MouseEventArgs e)
+        {
+
+        }
+
+        private void dataGridView1_MouseMove(object sender, MouseEventArgs e)
+        {
+
+        }
+
+        private void dataGridView1_KeyPress(object sender, KeyPressEventArgs e)
+        {
+
+        }
+
+        private void dataGridView1_KeyDown(object sender, KeyEventArgs e)
+        {
+
         }
     }
 }

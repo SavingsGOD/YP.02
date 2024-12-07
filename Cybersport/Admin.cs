@@ -24,7 +24,10 @@ namespace Cybersport
 
         private void button4_Click(object sender, EventArgs e)
         {
-
+            Authorization authorization = new Authorization();
+            this.Visible = false;
+            authorization.ShowDialog();
+            this.Close();
         }
 
         private void button3_Click(object sender, EventArgs e)
